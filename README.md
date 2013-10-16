@@ -8,7 +8,7 @@ So to save your weak pinky, this plugin helps you temporarily swap keymap and
 restore to original keymap.
 
 * [help](https://github.com/t9md/vim-mapswap/blob/master/doc/mapswap.txt)
-* See [kana/vim-submode](https://github.com/kana/vim-submode) and [It's discussion](https://github.com/kana/vim-submode/issues/1)
+* See also [kana/vim-submode](https://github.com/kana/vim-submode) and [It's discussion](https://github.com/kana/vim-submode/issues/1)
 
 # mapswap swap keymap temporarily
     " you can swap keymap temporarily with '<F9>' to save your pinky!
