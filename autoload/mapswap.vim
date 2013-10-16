@@ -1,8 +1,27 @@
-" let v = maparg("\<Tab>", 'i', 0, 1)
+" Utility:
+function! s:msg(msg) "{{{
+    try
+        echohl Function
+        echon a:msg
+        echohl Normal
+    finally
+        echohl Normal
+    endtry
+endfunction "}}}
+
+function! s:is_include(list, val) "{{{
+  for v in a:list
+    if v is a:val
+      return 1
+    endif
+  endfor
+  return 0
+endfunction "}}}
+
+" Object:
 let s:map = {}
 let s:map._saved = {}
-let s:map._swaped = 0
-let s:map._table  = ''
+let s:map._table  = []
 
 function! s:map.save(mode, lhs) "{{{
   let d = maparg(a:lhs, a:mode , 0, 1)
@@ -40,35 +59,34 @@ function! s:map.restore() "{{{
   let self._saved = {}
 endfunction "}}}
 
-function! s:msg(msg)
-    try
-        echohl Function
-        echon a:msg
-        echohl Normal
-    finally
-        echohl Normal
-    endtry
-endfunction
+function! s:map._modename() "{{{
+  return join( s:map._table , '|')
+endfunction "}}}
 
-function! s:map.swap(name) "{{{
-  let self._swaped = !self._swaped
-  if self._swaped
-    let F = get(g:mapswap_table, a:name) 
-    if type(F) ==# 2
-      call call(F, [], {})
-      call s:msg( "Swapped: -- " . a:name . " --" )
-      let self._table = a:name
-    endif
-  else
+function! s:map.swap(name, merge) "{{{
+  let need_restore =
+        \ ( !empty(self._saved) && !a:merge ) ||
+        \ ( a:merge && s:is_include(self._table, a:name))
+  echo need_restore
+
+  if need_restore
     call self.restore()
-      call s:msg( "Restored: -- " . a:name  ." --" )
-      let self._table = ''
+    call s:msg( "Restored: " . self._modename() . " --" )
+    let self._table = []
+    return
+  endif
+
+  let F = get(g:mapswap_table, a:name) 
+  if type(F) ==# 2
+    call call(F, [], {})
+    call add(self._table, a:name)
+    call s:msg( "Swapped: -- " . self._modename() . " --" )
   endif
 endfunction "}}}
 
 function! s:map.dump() "{{{
-  echo PP(self._saved)
-endfunction
+  echo PP(self)
+endfunction "}}}
 
 function! s:map._command(mode, option, lhs, rhs) "{{{
   let cmd_part = [
@@ -77,27 +95,31 @@ function! s:map._command(mode, option, lhs, rhs) "{{{
         \ a:rhs,
         \ ]
   return join(cmd_part)
-endfunction
+endfunction "}}}
 
 function! s:map.map(mode, option, lhs, rhs) "{{{
   call self.save(a:mode, a:lhs)
   execute self._command(a:mode, a:option, a:lhs, a:rhs)
-endfunction
+endfunction "}}}
 
-function! mapswap#swap(name)
-  call s:map.swap(a:name)
-endfunction
+" PublicAPI:
+function! mapswap#swap(name, ...) "{{{
+  let merge = a:0 ==# 1 ? a:1 : 0
+  call s:map.swap(a:name, merge)
+endfunction "}}}
 
-function! mapswap#map(mode, option, lhs, rhs)
+function! mapswap#map(mode, option, lhs, rhs) "{{{
   call s:map.map(a:mode, a:option, a:lhs, a:rhs)
-endfunction
+endfunction "}}}
 
-function! mapswap#dump()
+function! mapswap#dump() "{{{
   call s:map.dump()
 endfunction "}}}
-function! mapswap#restore()
+function! mapswap#restore() "{{{
   call s:map.restore()
 endfunction "}}}
-function! mapswap#statusline()
-  return empty(s:map._table) ? '' : '--' .  s:map._table . '--'
+function! mapswap#statusline() "{{{
+  return empty(s:map._table) ? '' : '-' . s:map._modename() . "-"
 endfunction "}}}
+
+" vim: foldmethod=marker

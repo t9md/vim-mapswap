@@ -28,7 +28,7 @@ rubikichi.
 http://d.hatena.ne.jp/rubikitch/20081104/1225745862
 
 Since we spend more time to reading 'code' than editing 'code'.
-So to save your weak pinky, this plugin help you temporarily swap keymap and 
+So to save your weak pinky, this plugin helps you temporarily swap keymap and 
 restore to original keymap.
 
 Use case:~
@@ -72,7 +72,7 @@ set in your '.vimrc'
 	nmap   <S-F9> <Plug>(mapswap-dump)
 <
 ==============================================================================
-BUG							    *mapswap-example*
+BUG							    *mapswap-bug*
 
 Here a lot of bug and limitation.
 
