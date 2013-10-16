@@ -1,6 +1,6 @@
 *mapswap.txt* swap keymap temporarily
 
-Version: 0.00001
+Version: 0.1
 Author : t9md <taqumd@gmail.com>
 GitHub : https://github.com/t9md/vim-mapswap
 ==============================================================================
@@ -60,13 +60,15 @@ set in your '.vimrc'
 	" you can swap keymap temporarily with '<F9>' to save your pinky!
 	let mapswap_table = {}
 	function! mapswap_table.view()
-	  call mapswap#map('n', '', 'f', '<C-f>')
-	  call mapswap#map('n', '', 'b', '<C-b>')
-	  call mapswap#map('n', '', 'u', '<C-u>')
-	  call mapswap#map('n', '', 'd', '<C-d>')
-	  call mapswap#map('n', '', '<CR>', '<C-]>')
-	  call mapswap#map('n', '', '<BS>', '<C-t>')
-	  call mapswap#map('n', '', '<Space>', '<C-d>')
+	  call mapswap#noremap('n' , '' , 'f'       , '<C-f>')
+	  call mapswap#noremap('n' , '' , 'b'       , '<C-b>')
+	  call mapswap#noremap('n' , '' , 'u'       , '<C-u>')
+	  call mapswap#noremap('n' , 'n' , 'd'       , '<C-d>')
+	  call mapswap#noremap('n' , '' , '<CR>'    , '<C-]>')
+	  call mapswap#noremap('n' , '' , '<BS>'    , '<C-t>')
+	  call mapswap#noremap('n' , 'n' , '<Space>' , '<C-d>')
+	  call     mapswap#map('n' , '' , 't'       , '<Plug>(quickhl-tag-toggle)')
+	  call     mapswap#map('n' , '' , 'a'       , '<Plug>(altr-forward)')
 	endfunction
 	nnoremap <F9> :call mapswap#swap('view')<CR>
 	nmap   <S-F9> <Plug>(mapswap-dump)
@@ -80,8 +82,12 @@ Here a lot of bug and limitation.
 TODO							    *mapswap-todo*
 
 Support all <expr>,  <buffer>, <silent> like so.
+Need check to several type of keymap surely restored.
+
 ==============================================================================
 CHANGELOG						*mapswap-changelog*
+2013-10-17: v0.1
+	- Now support enough keymap variation!
 2013-10-16:
 	- initial release
 ==============================================================================
