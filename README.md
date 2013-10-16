@@ -1,6 +1,3 @@
-# VERY EXPERIMENTAL STATE AND LUCK BASIC FEATURE
-
-
 # mapswap swap keymap temporarily
 
 Since we spend more time to reading 'code' than editing 'code'.
