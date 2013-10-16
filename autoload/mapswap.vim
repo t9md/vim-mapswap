@@ -73,11 +73,11 @@ let s:options_table = {
  "}}}
 
 " Object:
-let s:map = {}
-let s:map._saved = {}
-let s:map._table  = []
-let s:map._mapcmd = []
-let s:map._restore_cmd = []
+let s:map = {
+      \ "_table": [],
+      \ "_mapcmd": [],
+      \ "_restore_cmd": [],
+      \ }
 
 function! s:map.restore() "{{{
   call s:exe(self._restore_cmd)
@@ -116,7 +116,7 @@ function! s:map.dump() "{{{
   echo PP(self)
 endfunction "}}}
 
-function! s:map._map(map, mode, options, lhs, rhs)
+function! s:map._map(map, mode, options, lhs, rhs) "{{{
   let m = map(s:split(a:mode),
         \ "s:build_command(a:map, v:val , a:options, a:lhs, a:rhs)")
   let self._mapcmd = self._mapcmd + m
@@ -134,7 +134,7 @@ function! s:map._map(map, mode, options, lhs, rhs)
     endif
     let self._restore_cmd = self._restore_cmd + [r]
   endfor
-endfunction
+endfunction "}}}
 
 " PublicAPI:
 function! mapswap#swap(name, ...) "{{{
@@ -142,33 +142,6 @@ function! mapswap#swap(name, ...) "{{{
   call s:map.swap(a:name, merge)
 endfunction "}}}
 
-" submode#map({submode}, {modes}, {options}, {lhs}, {rhs}) "{{{
-"       {modes}		String
-"         A sequence of letters which specifies the
-"         modes to define a key mapping.  The meanings
-"         of letters are as follows:
-" 
-"         c	Command-line mode
-"         i	Insert mode
-"         n	Normal mode
-"         s	Select mode only
-"         v	Visual mode and Select mode
-"         x	Visual mode only
-"       {options}	String
-"         A sequence of letters which specifies some
-"         options for a key mapping to be defined.  The
-"         meanings of letters are as follows:
-" 
-"         b	Same as |:map-<buffer>|.
-"         e	Same as |:map-<expr>|.
-"         r	{rhs} may be remapped.
-"           If this letter is not included,
-"           {rhs} will be never remapped.
-"         s	Same as |:map-<silent>|.
-"         u	Same as |:map-<unique>|.
-"         x	After executing {rhs}, leave the
-"           submode.  This matters only for
-"           |submode#map()|. "}}}
 function! mapswap#_map(map, mode, options, lhs, rhs) "{{{
   call s:map._map(a:map, a:mode, a:options, a:lhs, a:rhs)
 endfunction "}}}

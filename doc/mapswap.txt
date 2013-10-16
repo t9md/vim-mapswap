@@ -10,6 +10,7 @@ Introduction				    |mapswap-introduction|
 Mapping					    |mapswap-mapping|
 Commands				    |mapswap-commands|
 Variables				    |mapswap-variables|
+Functions				    |mapswap-functions|
 Configuration Example			    |mapswap-example|
 Use Case				    |mapswap-usecase|
 Practice				    |mapswap-practice|
@@ -52,6 +53,42 @@ VARIABLES						*mapswap-variables*
 	Dicationary, which key is a function that set keymap.
 	see |mapswap-example|
 
+==============================================================================
+FUNCTIONS						*mapswap-functions*
+
+								*mapswap#_map()*
+mapswap#_map({map}, {mode}, {options}, {lhs}, {rhs})
+	{mode} is |String|. sequence of following chars.
+		c => Command-line mode
+		i => Insert mode
+		n => Normal mode
+		s => Select mode only
+		v => Visual mode and Select mode
+		x => Visual mode only
+	{options} is |String|. sequence of following chars.
+		b => <buffer>
+		e => <expr>
+		s => <silent>
+		u => <unique>
+		n => <nowait> usefull it's conflict global keymap
+		S => <script>
+		l => <special>
+	{lhs} is |String|, use '<CR>' form instead of "\<CR>".
+	{rhs} is |String|, use '<CR>' form instead of "\<CR>".
+	{rhs} is |String|, use
+
+								*mapswap#map()*
+mapswap#map({mode}, {options}, {lhs}, {rhs})
+	wrapper for mapswap#_map('map', ...)
+
+							*mapswap#noremap()*
+mapswap#noremap({mode}, {options}, {lhs}, {rhs})
+	wrapper for mapswap#_map('noremap', ...)
+
+							*mapswap#statusline()*
+mapswap#statusline()
+	return status string with mapping table name
+	which is useful to know whether you are in swapped state or not.
 ==============================================================================
 CONFIGURATION EXAMPLE				    *mapswap-example*
 
