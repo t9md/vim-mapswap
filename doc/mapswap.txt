@@ -1,0 +1,86 @@
+*mapswap.txt* swap keymap temporarily
+
+Version: 0.00001
+Author : t9md <taqumd@gmail.com>
+GitHub : https://github.com/t9md/vim-mapswap
+==============================================================================
+CONTENTS					*mapswap-contents*
+
+Introduction				    |mapswap-introduction|
+Mapping					    |mapswap-mapping|
+Commands				    |mapswap-commands|
+Variables				    |mapswap-variables|
+Configuration Example			    |mapswap-example|
+Use Case				    |mapswap-usecase|
+Practice				    |mapswap-practice|
+Bug					    |mapswap-bug|
+Todo					    |mapswap-todo|
+Changelog				    |mapswap-changelog|
+
+==============================================================================
+INTRODUCTION					*mapswap-introduction*
+
+This is very BETA stage, a lot of limitation and bugs.
+
+This plugin is inspired a blog post by rubykichi(Emacs' wizard).
+In this blog he introduced view-mode to save your weak pinky.
+rubikichi.
+http://d.hatena.ne.jp/rubikitch/20081104/1225745862
+
+Since we spend more time to reading 'code' than editing 'code'.
+So to save your weak pinky, this plugin help you temporarily swap keymap and 
+restore to original keymap.
+
+Use case:~
+When you read source code, you temporarily swap keymap and move page around
+with |u| ,|d| ,|f|, |b| instead of <C-u>, <C-d>, <C-f> , <C-b>
+
+==============================================================================
+MAPPINGS					*mapswap-mappings*
+
+n   <Plug>(mapswap-dump)
+	  Dump mapswap object for debugging.
+
+==============================================================================
+COMMANDS						*mapswap-commands*
+
+
+==============================================================================
+VARIABLES						*mapswap-variables*
+
+*g:mapswap_table*
+	Dicationary, which key is a function that set keymap.
+	see |mapswap-example|
+
+==============================================================================
+CONFIGURATION EXAMPLE				    *mapswap-example*
+
+set in your '.vimrc'
+>
+	" you can swap keymap temporarily with '<F9>' to save your pinky!
+	let mapswap_table = {}
+	function! mapswap_table.view()
+	  call mapswap#map('n', '', 'f', '<C-f>')
+	  call mapswap#map('n', '', 'b', '<C-b>')
+	  call mapswap#map('n', '', 'u', '<C-u>')
+	  call mapswap#map('n', '', 'd', '<C-d>')
+	  call mapswap#map('n', '', '<CR>', '<C-]>')
+	  call mapswap#map('n', '', '<BS>', '<C-t>')
+	  call mapswap#map('n', '', '<Space>', '<C-d>')
+	endfunction
+	nnoremap <F9> :call mapswap#swap('view')<CR>
+	nmap   <S-F9> <Plug>(mapswap-dump)
+<
+==============================================================================
+BUG							    *mapswap-example*
+
+Here a lot of bug and limitation.
+
+==============================================================================
+TODO							    *mapswap-todo*
+
+Support all <expr>,  <buffer>, <silent> like so.
+==============================================================================
+CHANGELOG						*mapswap-changelog*
+2013-10-16:
+	- initial release
