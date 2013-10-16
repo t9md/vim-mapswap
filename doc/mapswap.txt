@@ -84,3 +84,5 @@ Support all <expr>,  <buffer>, <silent> like so.
 CHANGELOG						*mapswap-changelog*
 2013-10-16:
 	- initial release
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
