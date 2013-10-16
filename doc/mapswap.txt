@@ -100,10 +100,14 @@ set in your '.vimrc'
 	  call mapswap#noremap('n' , '' , 'f'       , '<C-f>')
 	  call mapswap#noremap('n' , '' , 'b'       , '<C-b>')
 	  call mapswap#noremap('n' , '' , 'u'       , '<C-u>')
+
+          "second 'n' represent <nowait>. its avoid my global surround-vim mapping wait another key
 	  call mapswap#noremap('n' , 'n' , 'd'       , '<C-d>')
 	  call mapswap#noremap('n' , '' , '<CR>'    , '<C-]>')
 	  call mapswap#noremap('n' , '' , '<BS>'    , '<C-t>')
 	  call mapswap#noremap('n' , 'n' , '<Space>' , '<C-d>')
+
+          " you need #map for <Plug> virtual keymap
 	  call     mapswap#map('n' , '' , 't'       , '<Plug>(quickhl-tag-toggle)')
 	  call     mapswap#map('n' , '' , 'a'       , '<Plug>(altr-forward)')
 	endfunction
