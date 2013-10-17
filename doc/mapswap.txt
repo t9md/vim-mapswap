@@ -79,16 +79,44 @@ mapswap#_map({map}, {mode}, {options}, {lhs}, {rhs})
 
 								*mapswap#map()*
 mapswap#map({mode}, {options}, {lhs}, {rhs})
-	wrapper for mapswap#_map('map', ...)
+	Wrapper for mapswap#_map('map', ...)
 
 							*mapswap#noremap()*
 mapswap#noremap({mode}, {options}, {lhs}, {rhs})
-	wrapper for mapswap#_map('noremap', ...)
+	Wrapper for mapswap#_map('noremap', ...)
 
 							*mapswap#statusline()*
 mapswap#statusline()
-	return status string with mapping table name
+	Return status string with mapping table name
 	which is useful to know whether you are in swapped state or not.
+
+							*mapswap#setup()*
+mapswap#setup()
+	Setup virtual keymaps for convenience.
+	Calling this function is not mandatory.
+	This function should be called after all member functions of
+	|g:mapswap_table| are defined.
+	Since this function simply set following virtual keymap.
+        '<Plug>(mapswap-{name}) :<C-u>call mapswap#swap('{name}')<CR>
+	Where {name} is the key name of g:mapswap_table
+>
+	let mapswap_table = {}
+	function! mapswap_table.foo()
+	  call mapswap#noremap('n', '', 'a', ':echo "foo"<CR>')
+	endfunction
+	function! mapswap_table.bar()
+	  call mapswap#noremap('n', '', 'a', ':echo "bar"<CR>')
+	endfunction
+	call mapswap#setup()
+
+	nmap ,f <Plug>(mapswap-foo)
+	nmap ,b <Plug>(mapswap-bar)
+<
+	By calling |mapswap#setup()| you can use '<Plug>(mapswap-foo)' and
+	'<Plug>(mapswap-bar)'.
+
+	See also |mapswap-example|.
+
 ==============================================================================
 CONFIGURATION EXAMPLE				    *mapswap-example*
 
@@ -111,8 +139,9 @@ set in your '.vimrc'
 	  call     mapswap#map('n' , '' , 't'       , '<Plug>(quickhl-tag-toggle)')
 	  call     mapswap#map('n' , '' , 'a'       , '<Plug>(altr-forward)')
 	endfunction
-	nnoremap <F9> :call mapswap#swap('view')<CR>
-	nmap   <S-F9> <Plug>(mapswap-dump)
+	call mapswap#setup()
+	nmap <F9> <Plug>(mapswap-view)
+	nmap <S-F9> <Plug>(mapswap-dump)
 <
 ==============================================================================
 BUG							    *mapswap-bug*
@@ -127,6 +156,8 @@ Need check to several type of keymap surely restored.
 
 ==============================================================================
 CHANGELOG						*mapswap-changelog*
+2013-10-16:
+	- add |mapswap#setup()| for convenience.
 2013-10-17: v0.1
 	- Now support enough keymap variation!
 2013-10-16:

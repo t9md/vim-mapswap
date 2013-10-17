@@ -8,6 +8,20 @@ restore to original keymap.
 * See also [kana/vim-submode](https://github.com/kana/vim-submode) and [It's discussion](https://github.com/kana/vim-submode/issues/1)
 
 # mapswap swap keymap temporarily
+    "==== JUST_A_EXAMPLE to show 'mapswap#setup()' effect
+    function! mapswap_table.foo()
+      call mapswap#noremap('n', '', 'a', ':echo "foo"<CR>')
+    endfunction
+    function! mapswap_table.bar()
+      call mapswap#noremap('n', '', 'a', ':echo "bar"<CR>')
+    endfunction
+    call mapswap#setup()
+
+    " you can simply use <Plug>(mapswa-{name}) virtual keymap to define keymap
+    nmap ,f <Plug>(mapswap-foo)
+    nmap ,b <Plug>(mapswap-bar)
+    "==== JUST_A_EXAMPLE END
+
     " you can swap keymap temporarily with '<F9>' to save your pinky!
     let mapswap_table = {}
     function! mapswap_table.view()
@@ -25,8 +39,8 @@ restore to original keymap.
       call     mapswap#map('n' , '' , 't'       , '<Plug>(quickhl-tag-toggle)')
       call     mapswap#map('n' , '' , 'a'       , '<Plug>(altr-forward)')
     endfunction
-    nnoremap <Plug>(mapswap-view) :<C-u>call mapswap#swap('view')<CR>
-    nmap     <S-F9> <Plug>(mapswap-dump)
-    nmap <F9> <Plug>(mapswap-view)
+	  call mapswap#setup()
+    nmap <F9>   <Plug>(mapswap-view)
+    nmap <S-F9> <Plug>(mapswap-dump)
     " if you like more quicker keymap, idon't need '' since `` is always my favorite.
     " nmap '' <Plug>(mapswap-view)
