@@ -150,10 +150,66 @@ endfunction "}}}
 function! mapswap#noremap(mode, options, lhs, rhs) "{{{
   call mapswap#_map('noremap', a:mode, a:options, a:lhs, a:rhs)
 endfunction "}}}
-
 function! mapswap#map(mode, options, lhs, rhs) "{{{
   call mapswap#_map('map', a:mode, a:options, a:lhs, a:rhs)
 endfunction "}}}
+
+
+
+
+
+" Command:
+function! mapswap#cnoremap(options, lhs, rhs) "{{{
+  call mapswap#_map('noremap', 'c', a:options, a:lhs, a:rhs)
+endfunction "}}}
+function! mapswap#cmap(options, lhs, rhs) "{{{
+  call mapswap#_map('map', 'c', a:options, a:lhs, a:rhs)
+endfunction "}}}
+
+" Insert:
+function! mapswap#inoremap(options, lhs, rhs) "{{{
+  call mapswap#_map('noremap', 'i', a:options, a:lhs, a:rhs)
+endfunction "}}}
+function! mapswap#imap(options, lhs, rhs) "{{{
+  call mapswap#_map('map', 'i', a:options, a:lhs, a:rhs)
+endfunction "}}}
+
+" Normal:
+function! mapswap#nnoremap(options, lhs, rhs) "{{{
+  call mapswap#_map('noremap', 'n', a:options, a:lhs, a:rhs)
+endfunction "}}}
+function! mapswap#nmap(options, lhs, rhs) "{{{
+  call mapswap#_map('map', 'n', a:options, a:lhs, a:rhs)
+endfunction "}}}
+
+" Select:
+function! mapswap#snoremap(options, lhs, rhs) "{{{
+  call mapswap#_map('noremap', 's', a:options, a:lhs, a:rhs)
+endfunction "}}}
+function! mapswap#smap(options, lhs, rhs) "{{{
+  call mapswap#_map('map', 's', a:options, a:lhs, a:rhs)
+endfunction "}}}
+
+" Visual_and_Select:
+function! mapswap#vnoremap(options, lhs, rhs) "{{{
+  call mapswap#_map('noremap', 'v', a:options, a:lhs, a:rhs)
+endfunction "}}}
+function! mapswap#vmap(options, lhs, rhs) "{{{
+  call mapswap#_map('map', 'v', a:options, a:lhs, a:rhs)
+endfunction "}}}
+
+" Visual_only:
+function! mapswap#xnoremap(options, lhs, rhs) "{{{
+  call mapswap#_map('noremap', 'x', a:options, a:lhs, a:rhs)
+endfunction "}}}
+function! mapswap#xmap(options, lhs, rhs) "{{{
+  call mapswap#_map('map', 'x', a:options, a:lhs, a:rhs)
+endfunction "}}}
+
+
+
+
+
 
 function! mapswap#dump() "{{{
   call s:map.dump()
