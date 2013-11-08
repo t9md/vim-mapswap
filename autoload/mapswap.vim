@@ -9,12 +9,7 @@ function! s:msg(msg) "{{{
 endfunction "}}}
 
 function! s:is_include(list, val) "{{{
-  for v in a:list
-    if v is a:val
-      return 1
-    endif
-  endfor
-  return 0
+  return index(a:list, a:val) != -1
 endfunction "}}}
 
 function! s:split(mode) "{{{

@@ -85,6 +85,18 @@ mapswap#map({mode}, {options}, {lhs}, {rhs})
 mapswap#noremap({mode}, {options}, {lhs}, {rhs})
 	Wrapper for mapswap#_map('noremap', ...)
 
+mapswap#nmap({options}, {lhs}, {rhs})			    *mapswap#nmap()*
+mapswap#smap({options}, {lhs}, {rhs})			    *mapswap#smap()*
+mapswap#vmap({options}, {lhs}, {rhs})			    *mapswap#vmap()*
+mapswap#xmap({options}, {lhs}, {rhs})			    *mapswap#xmap()*
+	Wrapper for mapswap#_map('{X}map', ...)
+
+mapswap#nnoremap({options}, {lhs}, {rhs})		*mapswap#nnoremap()*
+mapswap#snoremap({options}, {lhs}, {rhs})		*mapswap#snoremap()*
+mapswap#vnoremap({options}, {lhs}, {rhs})		*mapswap#vnoremap()*
+mapswap#xnoremap({options}, {lhs}, {rhs})		*mapswap#xnoremap()*
+	Wrapper for mapswap#_map('{X}noremap', ...)
+
 							*mapswap#statusline()*
 mapswap#statusline()
 	Return status string with mapping table name
@@ -97,7 +109,7 @@ mapswap#setup()
 	This function should be called after all member functions of
 	|g:mapswap_table| are defined.
 	Since this function simply set following virtual keymap.
-        '<Plug>(mapswap-{name}) :<C-u>call mapswap#swap('{name}')<CR>
+	'<Plug>(mapswap-{name}) :<C-u>call mapswap#swap('{name}')<CR>
 	Where {name} is the key name of g:mapswap_table
 >
 	let mapswap_table = {}
@@ -125,19 +137,19 @@ set in your '.vimrc'
 	" you can swap keymap temporarily with '<F9>' to save your pinky!
 	let mapswap_table = {}
 	function! mapswap_table.view()
-	  call mapswap#noremap('n' , '' , 'f'       , '<C-f>')
-	  call mapswap#noremap('n' , '' , 'b'       , '<C-b>')
-	  call mapswap#noremap('n' , '' , 'u'       , '<C-u>')
+	  call mapswap#noremap('n' , '' , 'f'	    , '<C-f>')
+	  call mapswap#noremap('n' , '' , 'b'	    , '<C-b>')
+	  call mapswap#noremap('n' , '' , 'u'	    , '<C-u>')
 
-          "second 'n' represent <nowait>. its avoid my global surround-vim mapping wait another key
-	  call mapswap#noremap('n' , 'n' , 'd'       , '<C-d>')
+	  "second 'n' represent <nowait>. its avoid my global surround-vim mapping wait another key
+	  call mapswap#noremap('n' , 'n' , 'd'	     , '<C-d>')
 	  call mapswap#noremap('n' , '' , '<CR>'    , '<C-]>')
 	  call mapswap#noremap('n' , '' , '<BS>'    , '<C-t>')
 	  call mapswap#noremap('n' , 'n' , '<Space>' , '<C-d>')
 
-          " you need #map for <Plug> virtual keymap
-	  call     mapswap#map('n' , '' , 't'       , '<Plug>(quickhl-tag-toggle)')
-	  call     mapswap#map('n' , '' , 'a'       , '<Plug>(altr-forward)')
+	  " you need #map for <Plug> virtual keymap
+	  call	   mapswap#map('n' , '' , 't'	    , '<Plug>(quickhl-tag-toggle)')
+	  call	   mapswap#map('n' , '' , 'a'	    , '<Plug>(altr-forward)')
 	endfunction
 	call mapswap#setup()
 	nmap <F9> <Plug>(mapswap-view)
