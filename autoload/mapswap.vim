@@ -28,10 +28,11 @@ function! s:build_option(options) "{{{
 endfunction "}}}
 
 function! s:build_command(map, mode, options, lhs, rhs) "{{{
-  " FIXME I forgot the reason why delete 'b' option when {unmapp}ed
-  let options =  a:mode ==# 'unmap'
-        \ ?  ( s:is_include(s:split(a:options), 'b') ? 'b' : '' )
-        \ : a:options
+  let options =  a:options
+  if a:mode ==# 'unmap'
+    let options = s:is_include(s:split(a:options)) ? 'b' : ''
+  endif
+
   let v = [ a:mode . a:map, s:build_option(options), a:lhs, a:rhs ]
   if a:mode ==# 'unmap'
     call remove(v, -1)
@@ -149,8 +150,6 @@ endfunction "}}}
 function! mapswap#map(mode, options, lhs, rhs) "{{{
   call mapswap#_map('map', a:mode, a:options, a:lhs, a:rhs)
 endfunction "}}}
-
-
 
 
 
