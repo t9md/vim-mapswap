@@ -19,10 +19,12 @@ let s:old_cpo = &cpo
 set cpo&vim
 " }}}
 
+
 if !exists('g:mapswap_table')
   let mapswap_table = {}
 endif
 nnoremap <Plug>(mapswap-dump) :<C-u>call mapswap#dump()<CR>
+command! -nargs=1 Mapswap :call mapswap#swap(<q-args>)
 
 " FINISH: {{{
 let &cpo = s:old_cpo

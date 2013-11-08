@@ -28,6 +28,7 @@ function! s:build_option(options) "{{{
 endfunction "}}}
 
 function! s:build_command(map, mode, options, lhs, rhs) "{{{
+  " FIXME I forgot the reason why delete 'b' option when {unmapp}ed
   let options =  a:mode ==# 'unmap'
         \ ?  ( s:is_include(s:split(a:options), 'b') ? 'b' : '' )
         \ : a:options
@@ -42,7 +43,7 @@ function! s:build_restore_mapcmd(dict, mode) "{{{
   let d = a:dict
   let cmd_part = [
         \ a:mode . (d.noremap ? "noremap" : "map"),
-        \ d.buffer ? "<silent>" : '',
+        \ d.buffer ? "<buffer>" : '',
         \ d.expr   ? "<expr>"   : '',
         \ d.nowait ? "<nowait>" : '',
         \ d.silent ? "<silent>" : '',

@@ -85,12 +85,14 @@ mapswap#map({mode}, {options}, {lhs}, {rhs})
 mapswap#noremap({mode}, {options}, {lhs}, {rhs})
 	Wrapper for mapswap#_map('noremap', ...)
 
+mapswap#cmap({options}, {lhs}, {rhs})			    *mapswap#cmap()*
 mapswap#nmap({options}, {lhs}, {rhs})			    *mapswap#nmap()*
 mapswap#smap({options}, {lhs}, {rhs})			    *mapswap#smap()*
 mapswap#vmap({options}, {lhs}, {rhs})			    *mapswap#vmap()*
 mapswap#xmap({options}, {lhs}, {rhs})			    *mapswap#xmap()*
 	Wrapper for mapswap#_map('{X}map', ...)
 
+mapswap#cnoremap({options}, {lhs}, {rhs})		*mapswap#cnoremap()*
 mapswap#nnoremap({options}, {lhs}, {rhs})		*mapswap#nnoremap()*
 mapswap#snoremap({options}, {lhs}, {rhs})		*mapswap#snoremap()*
 mapswap#vnoremap({options}, {lhs}, {rhs})		*mapswap#vnoremap()*
