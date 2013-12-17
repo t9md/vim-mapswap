@@ -9,10 +9,11 @@ restore to original keymap.
 
 # mapswap swap keymap temporarily
     "==== JUST_A_EXAMPLE to show 'mapswap#setup()' effect
-    function! mapswap_table.foo()
+    let g:mapswap_table = {}
+    function! g:mapswap_table.foo()
       call mapswap#noremap('n', '', 'a', ':echo "foo"<CR>')
     endfunction
-    function! mapswap_table.bar()
+    function! g:mapswap_table.bar()
       call mapswap#noremap('n', '', 'a', ':echo "bar"<CR>')
     endfunction
     call mapswap#setup()
@@ -23,8 +24,8 @@ restore to original keymap.
     "==== JUST_A_EXAMPLE END
 
     " you can swap keymap temporarily with '<F9>' to save your pinky!
-    let mapswap_table = {}
-    function! mapswap_table.view()
+    let g:mapswap_table = {}
+    function! g:mapswap_table.view()
       call mapswap#noremap('n' , '' , 'f'       , '<C-f>')
       call mapswap#noremap('n' , '' , 'b'       , '<C-b>')
       call mapswap#noremap('n' , '' , 'u'       , '<C-u>')
