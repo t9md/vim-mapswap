@@ -24,7 +24,10 @@ set cpo&vim
 
 
 if !exists('g:mapswap_table')
-  let mapswap_table = {}
+  let g:mapswap_table = {}
+endif
+if !exists('g:mapswap_fook')
+  let g:mapswap_hook = {}
 endif
 
 function! s:mapswap_modes(A, L, P) "{{{1

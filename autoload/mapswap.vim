@@ -76,9 +76,20 @@ let s:map = {
 
 function! s:map.restore() "{{{
   call s:exe(self._restore_cmd)
+  call self.call_hook('post_restore')
   let self._restore_cmd = []
   let self._table = []
   call s:msg( "Restored: " . self._modename() . " --" )
+endfunction "}}}
+
+function! s:map.call_hook(hook_name) "{{{
+  let hooks = get(g:mapswap_fook, self._modename())
+  if empty(hooks)
+    return
+  endif
+  if type(get(hooks, a:hook_name)) == type(function('tr'))
+    call hooks[a:hook_name]()
+  endif
 endfunction "}}}
 
 function! s:map._modename() "{{{
@@ -103,6 +114,7 @@ function! s:map.swap(name, merge) "{{{
     let  self._mapcmd = []
     call s:msg( "Swapped: -- " . self._modename() . " --" )
   endif
+  call self.call_hook('post_swap')
 endfunction "}}}
 
 function! s:map.dump() "{{{
