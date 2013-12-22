@@ -214,6 +214,14 @@ function! mapswap#restore() "{{{
   call s:map.restore()
 endfunction "}}}
 
+function! mapswap#is_swapped() "{{{
+  return !empty(s:map._table)
+endfunction "}}}
+
+function! mapswap#tablename() "{{{
+  return s:map._modename()
+endfunction "}}}
+
 function! mapswap#statusline() "{{{
   return empty(s:map._table) ? '' : '-' . s:map._modename() . "-"
 endfunction "}}}
