@@ -1,33 +1,38 @@
 " Utility:
-function! s:msg(msg) "{{{
+function! s:msg(msg) "{{{1
   try
     echohl Function
     echon a:msg
   finally
     echohl Normal
   endtry
-endfunction "}}}
+endfunction
 
-function! s:is_include(list, val) "{{{
+function! s:build_virtual_map(name) "{{{1
+  return 'nnoremap <Plug>(mapswap-'
+        \ . a:name . ') :<C-u>call mapswap#swap("' . a:name . '")<CR>'
+endfunction
+
+function! s:is_include(list, val) "{{{1
   return index(a:list, a:val) != -1
-endfunction "}}}
+endfunction
 
-function! s:split(mode) "{{{
+function! s:split(mode) "{{{1
   return split(a:mode, '.\zs')
-endfunction "}}}
+endfunction
 
-function! s:exe(list) "{{{
+function! s:exe(list) "{{{1
   for c in (type(a:list) ==# type([]) ? a:list : [a:list])
     " echo c
     exe c
   endfor
-endfunction "}}}
+endfunction
 
-function! s:build_option(options) "{{{
+function! s:build_option(options) "{{{1
   return join(map(s:split(a:options),'get(s:options_table, v:val)'))
-endfunction "}}}
+endfunction
 
-function! s:build_command(map, mode, options, lhs, rhs) "{{{
+function! s:build_command(map, mode, options, lhs, rhs) "{{{1
   let options =  a:options
   if a:mode ==# 'unmap'
     let options = s:is_include(s:split(a:options)) ? 'b' : ''
@@ -38,9 +43,9 @@ function! s:build_command(map, mode, options, lhs, rhs) "{{{
     call remove(v, -1)
   endif
   return join( filter(v, 'len(v:val)'))
-endfunction "}}}
+endfunction
 
-function! s:build_restore_mapcmd(dict, mode) "{{{
+function! s:build_restore_mapcmd(dict, mode) "{{{1
   let d = a:dict
   let cmd_part = [
         \ a:mode . (d.noremap ? "noremap" : "map"),
@@ -52,10 +57,10 @@ function! s:build_restore_mapcmd(dict, mode) "{{{
         \ d.rhs,
         \ ]
   return join(filter(cmd_part, 'len(v:val)'))
-endfunction "}}}
+endfunction
+"}}}
 
 " Option_table:
-" {{{
 let s:options_table = {
       \ "b": "<buffer>",
       \ "e": "<expr>",
@@ -65,7 +70,6 @@ let s:options_table = {
       \ "S": "<script>",
       \ "l": "<special>",
       \ }
-"}}}
 
 " Object:
 let s:map = {
@@ -74,29 +78,29 @@ let s:map = {
       \ "_restore_cmd": [],
       \ }
 
-function! s:map.restore() "{{{
+function! s:map.restore() "{{{1
   call s:exe(self._restore_cmd)
   call self.call_hook('post_restore')
   let self._restore_cmd = []
   let self._table = []
   call s:msg( "Restored: " . self._modename() . " --" )
-endfunction "}}}
+endfunction
 
-function! s:map.call_hook(hook_name) "{{{
-  let hooks = get(g:mapswap_fook, self._modename())
+function! s:map.call_hook(hook_name) "{{{1
+  let hooks = get(g:mapswap_hook, self._modename())
   if empty(hooks)
     return
   endif
   if type(get(hooks, a:hook_name)) == type(function('tr'))
     call hooks[a:hook_name]()
   endif
-endfunction "}}}
+endfunction
 
-function! s:map._modename() "{{{
+function! s:map._modename() "{{{1
   return join( s:map._table , '|')
-endfunction "}}}
+endfunction
 
-function! s:map.swap(name, merge) "{{{
+function! s:map.swap(name, merge) "{{{1
   " let need_restore =
   " \ ( !empty(self._saved) && !a:merge ) ||
   " \ ( a:merge && s:is_include(self._table, a:name))
@@ -115,13 +119,13 @@ function! s:map.swap(name, merge) "{{{
     call s:msg( "Swapped: -- " . self._modename() . " --" )
   endif
   call self.call_hook('post_swap')
-endfunction "}}}
+endfunction
 
-function! s:map.dump() "{{{
+function! s:map.dump() "{{{1
   echo PP(self)
-endfunction "}}}
+endfunction
 
-function! s:map._map(map, mode, options, lhs, rhs) "{{{
+function! s:map._map(map, mode, options, lhs, rhs) "{{{1
   let m = map(s:split(a:mode),
         \ "s:build_command(a:map, v:val , a:options, a:lhs, a:rhs)")
   let self._mapcmd = self._mapcmd + m
@@ -133,109 +137,113 @@ function! s:map._map(map, mode, options, lhs, rhs) "{{{
           \ : s:build_restore_mapcmd(d, mode)
     let self._restore_cmd = self._restore_cmd + [r]
   endfor
-endfunction "}}}
+endfunction
+"}}}
 
 " PublicAPI:
-function! mapswap#swap(name, ...) "{{{
+function! mapswap#swap(name, ...) "{{{1
   let merge = a:0 ==# 1 ? a:1 : 0
   call s:map.swap(a:name, merge)
-endfunction "}}}
+endfunction
 
-function! mapswap#setup() "{{{
+function! mapswap#setup() "{{{1
   for name in keys(g:mapswap_table)
     call s:exe(s:build_virtual_map(name))
   endfor
-endfunction "}}}
+endfunction
 
-function! s:build_virtual_map(name) "{{{
-  return 'nnoremap <Plug>(mapswap-'
-        \ . a:name . ') :<C-u>call mapswap#swap("' . a:name . '")<CR>'
-endfunction "}}}
-
-function! mapswap#_map(map, mode, options, lhs, rhs) "{{{
+function! mapswap#_map(map, mode, options, lhs, rhs) "{{{1
   call s:map._map(a:map, a:mode, a:options, a:lhs, a:rhs)
-endfunction "}}}
+endfunction
 
-function! mapswap#noremap(mode, options, lhs, rhs) "{{{
+function! mapswap#noremap(mode, options, lhs, rhs) "{{{1
   call mapswap#_map('noremap', a:mode, a:options, a:lhs, a:rhs)
-endfunction "}}}
-function! mapswap#map(mode, options, lhs, rhs) "{{{
+endfunction
+
+function! mapswap#map(mode, options, lhs, rhs) "{{{1
   call mapswap#_map('map', a:mode, a:options, a:lhs, a:rhs)
-endfunction "}}}
-
-
+endfunction
 
 " Command:
-function! mapswap#cnoremap(options, lhs, rhs) "{{{
+function! mapswap#cnoremap(options, lhs, rhs) "{{{2
   call mapswap#_map('noremap', 'c', a:options, a:lhs, a:rhs)
-endfunction "}}}
-function! mapswap#cmap(options, lhs, rhs) "{{{
+endfunction
+
+function! mapswap#cmap(options, lhs, rhs) "{{{2
   call mapswap#_map('map', 'c', a:options, a:lhs, a:rhs)
-endfunction "}}}
+endfunction
+"}}}
 
 " Insert:
-function! mapswap#inoremap(options, lhs, rhs) "{{{
+function! mapswap#inoremap(options, lhs, rhs) "{{{2
   call mapswap#_map('noremap', 'i', a:options, a:lhs, a:rhs)
-endfunction "}}}
-function! mapswap#imap(options, lhs, rhs) "{{{
+endfunction
+
+function! mapswap#imap(options, lhs, rhs) "{{{2
   call mapswap#_map('map', 'i', a:options, a:lhs, a:rhs)
-endfunction "}}}
+endfunction
+"}}}
 
 " Normal:
-function! mapswap#nnoremap(options, lhs, rhs) "{{{
+function! mapswap#nnoremap(options, lhs, rhs) "{{{2
   call mapswap#_map('noremap', 'n', a:options, a:lhs, a:rhs)
-endfunction "}}}
-function! mapswap#nmap(options, lhs, rhs) "{{{
+endfunction
+
+function! mapswap#nmap(options, lhs, rhs) "{{{2
   call mapswap#_map('map', 'n', a:options, a:lhs, a:rhs)
-endfunction "}}}
+endfunction
+"}}}
 
 " Select:
-function! mapswap#snoremap(options, lhs, rhs) "{{{
+function! mapswap#snoremap(options, lhs, rhs) "{{{2
   call mapswap#_map('noremap', 's', a:options, a:lhs, a:rhs)
-endfunction "}}}
-function! mapswap#smap(options, lhs, rhs) "{{{
+endfunction
+
+function! mapswap#smap(options, lhs, rhs) "{{{2
   call mapswap#_map('map', 's', a:options, a:lhs, a:rhs)
-endfunction "}}}
+endfunction
+"}}}
 
 " Visual_and_Select:
-function! mapswap#vnoremap(options, lhs, rhs) "{{{
+function! mapswap#vnoremap(options, lhs, rhs) "{{{2
   call mapswap#_map('noremap', 'v', a:options, a:lhs, a:rhs)
-endfunction "}}}
-function! mapswap#vmap(options, lhs, rhs) "{{{
+endfunction
+
+function! mapswap#vmap(options, lhs, rhs) "{{{2
   call mapswap#_map('map', 'v', a:options, a:lhs, a:rhs)
-endfunction "}}}
+endfunction
+"}}}
 
 " Visual_only:
-function! mapswap#xnoremap(options, lhs, rhs) "{{{
+function! mapswap#xnoremap(options, lhs, rhs) "{{{1
   call mapswap#_map('noremap', 'x', a:options, a:lhs, a:rhs)
-endfunction "}}}
-function! mapswap#xmap(options, lhs, rhs) "{{{
+endfunction
+
+function! mapswap#xmap(options, lhs, rhs) "{{{1
   call mapswap#_map('map', 'x', a:options, a:lhs, a:rhs)
-endfunction "}}}
+endfunction
+"}}}
 
-
-
-
-
-
-function! mapswap#dump() "{{{
+" Other:
+function! mapswap#dump() "{{{1
   call s:map.dump()
-endfunction "}}}
+endfunction
 
-function! mapswap#restore() "{{{
+function! mapswap#restore() "{{{1
   call s:map.restore()
-endfunction "}}}
+endfunction
 
-function! mapswap#is_swapped() "{{{
+function! mapswap#is_swapped() "{{{1
   return !empty(s:map._table)
-endfunction "}}}
+endfunction
 
-function! mapswap#tablename() "{{{
+function! mapswap#tablename() "{{{1
   return s:map._modename()
-endfunction "}}}
+endfunction
 
-function! mapswap#statusline() "{{{
+function! mapswap#statusline() "{{{1
   return empty(s:map._table) ? '' : '-' . s:map._modename() . "-"
-endfunction "}}}
+endfunction
+"}}}
 
 " vim: foldmethod=marker
